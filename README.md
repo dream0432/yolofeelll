@@ -1,221 +1,348 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เพื่อนรับฟังของคุณ</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ให้เราได้รับฟังและให้คุณได้ระบาย</title>
   <style>
     body {
-      font-family: 'Prompt', sans-serif;
-      text-align: center;
-      padding: 50px 20px;
-      background: linear-gradient(to bottom, #e0f7fa, #ffffff);
-      position: relative;
-      overflow: hidden;
       margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background: #f0f0f0;
     }
-    #page2 {
+
+    /* หน้าแต่ละหน้า */
+    #page1, #page2, #page3, #admin-panel {
       display: none;
-    }
-    #note {
-      width: 100%;
-      max-width: 500px;
-      height: 240px;
-      margin: 20px auto;
-      font-size: 18px;
-      padding: 20px 25px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      resize: none;
-      background-color: #fef9e7;
-      background-image: repeating-linear-gradient(to bottom, #ddd 0, #ddd 1px, transparent 1px, transparent 24px);
-      background-size: 100% 24px;
-      line-height: 24px;
-      color: #333;
-      font-family: 'Courier New', Courier, monospace;
-      box-shadow: 0 0 8px rgba(0,0,0,0.15);
-      transition: transform 0.3s ease;
-      position: relative;
-      z-index: 10;
-      text-align: left;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      padding: 20px;
       box-sizing: border-box;
     }
+
+    #page1 {
+      display: flex;
+      background: #ffe5e5;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
     button {
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 16px;
       border: none;
-      border-radius: 10px;
-      background-color: #ff6f61;
+      background: #ff6666;
       color: white;
+      border-radius: 6px;
       cursor: pointer;
-      max-width: 90vw;
+      margin-top: 10px;
     }
+
     button:hover {
-      background-color: #e64a19;
+      background: #ff4c4c;
     }
-    .fade {
-      animation: fadeIn 1.5s ease-in-out forwards;
-      opacity: 0;
+
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      height: 200px;
+      padding: 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
     }
-    @keyframes fadeIn {
-      to { opacity: 1; }
+
+    .burning {
+      animation: burn 2s forwards;
     }
+
     @keyframes burn {
-      0% { opacity: 1; transform: scale(1) translateY(0); filter: brightness(1); }
-      100% { opacity: 0; transform: scale(0.8) translateY(-100px); filter: brightness(0.1); }
+      0% { opacity: 1; filter: none; }
+      100% { opacity: 0; filter: blur(20px); transform: scale(0.9); }
     }
-    @keyframes flame {
-      0% { opacity: 1; transform: scale(2.5) translateY(0); }
-      30% { opacity: 1; transform: scale(3.5) translateY(-20px); }
-      60% { opacity: 0.9; transform: scale(3) translateY(-40px); }
-      100% { opacity: 0; transform: scale(2.2) translateY(-60px); }
-    }
-    .flame {
-      position: absolute;
-      width: 50px;
-      height: 100px;
-      background: radial-gradient(circle, #ffffcc, #ff6600, #990000);
-      border-radius: 50%;
-      animation: flame 1.2s ease-in-out infinite;
-      pointer-events: none;
-      z-index: 60;
-      mix-blend-mode: screen;
-      opacity: 0.95;
-    }
+
     .ash {
       position: absolute;
-      width: 2px;
-      height: 10px;
-      background: #555;
-      opacity: 0.8;
-      animation: fall 3s ease-in forwards;
-    }
-    .smoke {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      background: radial-gradient(closest-side, rgba(200,200,200,0.5), transparent);
+      width: 5px;
+      height: 5px;
+      background: gray;
       border-radius: 50%;
-      animation: rise 4s ease-out forwards;
-      pointer-events: none;
-      z-index: 40;
+      animation: fall 2s linear forwards;
+      opacity: 0.6;
     }
-    @keyframes rise {
-      to {
-        transform: translateY(-200px) scale(2);
-        opacity: 0;
-      }
-    }
+
     @keyframes fall {
-      to {
-        transform: translateY(200px) scale(0.5);
-        opacity: 0;
-      }
+      from { transform: translateY(0); }
+      to { transform: translateY(300px); opacity: 0; }
     }
+
+    #flames {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,100,0,0.5) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* แอนิเมชันตอนเปิดเว็บ */
+    .fade-in-up {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 1s ease-out forwards;
+    }
+
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
-    @media (max-width: 600px) {
-      body {
-        padding: 30px 15px;
-      }
-      h1, h2 {
-        font-size: 1.5rem;
-      }
-      button {
-        font-size: 14px;
-        padding: 8px 16px;
-      }
+
+    /* หน้าแอดมิน */
+    #admin-panel {
+      background: #fffefc;
+      overflow-y: auto;
+      padding: 40px 20px;
+    }
+
+    #entry-list div {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: #fff8f0;
+      border-radius: 6px;
+      box-shadow: 1px 1px 4px rgba(0,0,0,0.05);
+    }
+
+    #admin-login {
+      margin-top: 10px;
+    }
+
+    #admin-login input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    #admin-login button {
+      margin-left: 10px;
+      background: #333;
+    }
+
+    #login-error {
+      color: red;
+      margin-top: 10px;
+      display: none;
+    }
+
+    #search-box {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+
+    #clear-all {
+      background: #dc3545;
+    }
+
+    /* ปุ่มไอคอนแอดมิน (ล่างซ้าย) */
+    #admin-toggle-icon {
+      position: fixed;
+      bottom: 15px;
+      left: 15px;
+      width: 32px;
+      height: 32px;
+      cursor: pointer;
+      z-index: 100;
+      opacity: 0.8;
+      transition: transform 0.2s;
+    }
+
+    #admin-toggle-icon:hover {
+      transform: scale(1.2);
+      opacity: 1;
     }
   </style>
 </head>
 <body>
-  <audio id="burnSound" src="https://cdn.pixabay.com/audio/2021/12/15/audio_1d42944f45.mp3"></audio>
-  <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2023/04/10/audio_2055023ed8.mp3" autoplay loop></audio>
 
-  <div id="page1">
-    <h1>ยินดีที่ได้เจอคุณ</h1>
-    <p>ผมจะเป็นเพื่อนที่รับฟังคุณ</p>
-    <button onclick="goToPage2()">ระบายให้ฉันฟัง</button>
+  <!-- หน้าแรก -->
+  <div id="page1" class="fade-in-up">
+    <h1>ให้เราได้รับฟัง<br>และให้คุณได้ระบาย</h1>
+    <button id="go-to-write">เริ่มระบายความรู้สึก</button>
+    <div id="admin-login" style="display: none;">
+      <input type="password" id="admin-pass" placeholder="รหัสผ่านแอดมิน" />
+      <button id="admin-login-btn">เข้าสู่ระบบ</button>
+      <div id="login-error">รหัสผ่านไม่ถูกต้อง</div>
+    </div>
   </div>
 
+  <!-- ปุ่มไอคอน admin -->
+  <svg id="admin-toggle-icon" viewBox="0 0 24 24" fill="#555">
+    <path d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.5.5 0 0 0 .12-.65l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96a7.025 7.025 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 14.25 2h-4.5a.5.5 0 0 0-.5.43l-.36 2.54c-.61.24-1.17.55-1.69.94l-2.39-.96a.5.5 0 0 0-.61.22L2.7 8.83a.5.5 0 0 0 .12.65l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94L2.82 14.53a.5.5 0 0 0-.12.65l1.92 3.32a.5.5 0 0 0 .61.22l2.39-.96c.52.39 1.08.7 1.69.94l.36 2.54c.04.25.25.43.5.43h4.5c.25 0 .46-.18.5-.43l.36-2.54c.61-.24 1.17-.55 1.69-.94l2.39.96a.5.5 0 0 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.65l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 15.5 12 3.5 3.5 0 0 1 12 15.5z"/>
+  </svg>
+
+  <!-- หน้าระบายความรู้สึก -->
   <div id="page2">
-    <h2>ระบายความรู้สึกของคุณ</h2>
-    <textarea id="note" placeholder="เขียนอะไรก็ได้ที่คุณรู้สึก..."></textarea><br>
-    <button onclick="burnNote()">เผาความเศร้า</button>
-    <div id="message" class="fade" style="margin-top: 30px; font-size: 20px; color: #333; display: none;"></div>
+    <textarea id="paper" placeholder="พิมพ์สิ่งที่คุณอยากระบาย..."></textarea>
+    <button id="burn-btn">เผาความรู้สึกนี้</button>
+    <div id="ash-container"></div>
+    <div id="flames" style="display: none;"></div>
+  </div>
+
+  <!-- หน้าขอบคุณ -->
+  <div id="page3">
+    <h1>ขอบคุณที่ไว้วางใจเรา<br>ขอให้ใจคุณเบาลง</h1>
+    <button id="add-more">ระบายเพิ่มอีก</button>
+  </div>
+
+  <!-- หน้าแอดมิน -->
+  <div id="admin-panel">
+    <h2>ข้อความที่เคยระบาย</h2>
+    <input type="text" id="search-box" placeholder="ค้นหาข้อความ..." />
+    <button id="clear-all">ลบข้อความทั้งหมด</button>
+    <div id="entry-list"></div>
   </div>
 
   <script>
-    function goToPage2() {
-      document.getElementById('page1').style.display = 'none';
-      document.getElementById('page2').style.display = 'block';
+    const page1 = document.getElementById("page1");
+    const page2 = document.getElementById("page2");
+    const page3 = document.getElementById("page3");
+    const adminPanel = document.getElementById("admin-panel");
+    const goToWriteBtn = document.getElementById("go-to-write");
+    const adminLoginBtn = document.getElementById("admin-login-btn");
+    const adminPassInput = document.getElementById("admin-pass");
+    const loginError = document.getElementById("login-error");
+    const paper = document.getElementById("paper");
+    const burnBtn = document.getElementById("burn-btn");
+    const addBtn = document.getElementById("add-more");
+    const ashContainer = document.getElementById("ash-container");
+    const flames = document.getElementById("flames");
+    const adminLoginBox = document.getElementById("admin-login");
+    const adminToggle = document.getElementById("admin-toggle-icon");
+    const entryList = document.getElementById("entry-list");
+    const searchBox = document.getElementById("search-box");
+    const clearAllBtn = document.getElementById("clear-all");
+
+    let isAdmin = false;
+
+    function getEntries() {
+      return JSON.parse(localStorage.getItem("burnedMessages") || "[]");
     }
 
-    function burnNote() {
-      const note = document.getElementById('note');
-      const burnSound = document.getElementById('burnSound');
-      burnSound.play();
-      note.style.animation = 'burn 2.5s ease-in-out forwards';
+    function saveEntry(text) {
+      const entries = getEntries();
+      entries.push({ text, timestamp: new Date().toISOString() });
+      localStorage.setItem("burnedMessages", JSON.stringify(entries));
+    }
 
+    function showHistory(filter = "") {
+      const entries = getEntries();
+      const filtered = entries.filter(e => e.text.toLowerCase().includes(filter.toLowerCase()));
+      entryList.innerHTML = "";
+
+      if (filtered.length === 0) {
+        entryList.innerHTML = "<p>ไม่พบข้อความ</p>";
+        return;
+      }
+
+      filtered.reverse().forEach(e => {
+        const item = document.createElement("div");
+        item.innerHTML = `<strong>${new Date(e.timestamp).toLocaleString()}</strong><br>${e.text}`;
+        entryList.appendChild(item);
+      });
+    }
+
+    function createAshParticles() {
+      ashContainer.innerHTML = "";
       for (let i = 0; i < 60; i++) {
-        const flame = document.createElement('div');
-        flame.className = 'flame';
-        flame.style.left = (note.offsetLeft + Math.random() * note.offsetWidth) + 'px';
-        flame.style.top = (note.offsetTop + note.offsetHeight - 10 - Math.random() * 20) + 'px';
-        document.body.appendChild(flame);
-        setTimeout(() => flame.remove(), 2000);
+        const ash = document.createElement("div");
+        ash.className = "ash";
+        ash.style.left = `${Math.random() * 100}%`;
+        ash.style.animationDelay = `${Math.random()}s`;
+        ashContainer.appendChild(ash);
       }
+    }
 
-      for (let i = 0; i < 40; i++) {
-        const ash = document.createElement('div');
-        ash.className = 'ash';
-        ash.style.left = (note.offsetLeft + Math.random() * note.offsetWidth) + 'px';
-        ash.style.top = (note.offsetTop + Math.random() * note.offsetHeight) + 'px';
-        document.body.appendChild(ash);
-        setTimeout(() => ash.remove(), 3000);
+    goToWriteBtn.addEventListener("click", () => {
+      page1.style.display = "none";
+      page2.style.display = "flex";
+    });
+
+    adminToggle.addEventListener("click", () => {
+      adminLoginBox.style.display = adminLoginBox.style.display === "block" ? "none" : "block";
+      if (adminLoginBox.style.display === "block") adminPassInput.focus();
+    });
+
+    adminLoginBtn.addEventListener("click", () => {
+      if (adminPassInput.value.trim() === "230749") {
+        isAdmin = true;
+        loginError.style.display = "none";
+        page1.style.display = "none";
+        adminLoginBox.style.display = "none";
+        adminPanel.style.display = "flex";
+        showHistory();
+      } else {
+        loginError.style.display = "block";
       }
+      adminPassInput.value = "";
+    });
 
-      for (let i = 0; i < 35; i++) {
-        const smoke = document.createElement('div');
-        smoke.className = 'smoke';
-        smoke.style.left = (note.offsetLeft + Math.random() * note.offsetWidth) + 'px';
-        smoke.style.top = (note.offsetTop + Math.random() * note.offsetHeight) + 'px';
-        document.body.appendChild(smoke);
-        setTimeout(() => smoke.remove(), 4000);
-      }
-
+    burnBtn.addEventListener("click", () => {
+      const text = paper.value.trim();
+      if (!text) return;
+      if (!isAdmin) saveEntry(text);
+      paper.classList.add("burning");
+      flames.style.display = "block";
+      createAshParticles();
+      burnBtn.style.display = "none";
       setTimeout(() => {
-        const message = document.getElementById('message');
-        message.innerHTML = `
-          <div style="animation: fadeInUp 2.5s ease-in-out forwards; margin-top: 0; padding-top: 5px;">
-            <p style="font-size: 18px; color: #444; margin-bottom: 10px;">ขอให้เราได้ช่วยเป็นสิ่งหนึ่งในการรับฟังและระบายของคุณ<br>เราจะอยู่ข้างคุณเสมอ</p>
-            <p style="margin-top: 5px;">ระบายสิ่งที่ไม่สบายใจอีกรอบ</p>
-            <br><button onclick=\"resetPage()\">กลับไประบายอีกครั้ง</button>
-          </div>`;
-        message.classList.add('fade');
-        message.style.display = 'block';
-        message.style.opacity = '1';
-      }, 2600);
-    }
+        paper.value = "";
+        paper.classList.remove("burning");
+        flames.style.display = "none";
+        ashContainer.innerHTML = "";
+        page2.style.display = "none";
+        page3.style.display = "flex";
+        burnBtn.style.display = "inline-block";
+      }, 2000);
+    });
 
-    function resetPage() {
-      const note = document.getElementById('note');
-      const message = document.getElementById('message');
-      note.style.display = 'block';
-      note.style.marginTop = '20px';
-      note.value = '';
-      note.style.animation = '';
-      message.style.display = 'none';
-      message.innerHTML = '';
-    }
+    addBtn.addEventListener("click", () => {
+      page3.style.display = "none";
+      page2.style.display = "flex";
+    });
+
+    searchBox.addEventListener("input", () => {
+      showHistory(searchBox.value);
+    });
+
+    clearAllBtn.addEventListener("click", () => {
+      if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อความทั้งหมด?")) {
+        localStorage.removeItem("burnedMessages");
+        showHistory();
+      }
+    });
+
+    // แอนิเมชันตอนเปิดเว็บ
+    window.addEventListener("load", () => {
+      page1.classList.add("fade-in-up");
+    });
   </script>
+
 </body>
 </html>
